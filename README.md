@@ -12,14 +12,14 @@ For the complete product strategy, architecture, roadmap, risks, and success met
 
 ## 👥 Team Members
 
-| Name                 | Student ID  |
-| -------------------- | ----------- |
-| Rugved Khanwalkar    | 2025MB26040 |
-| Srishti Shrivastava  | 2025MB26194 |
-| Shoaib Ahmed Sharief | 2025MB26144 |
-| Sonali               | 2025MB26173 |
-| Anirban              | 2025MB26003 |
-| Shreya               | 2025MB26176 |
+| Name                 | Student ID  | Contact Number |
+| -------------------- | ----------- | -------------- |
+| Anirban              | 2025MB26003 | 9120735424     |
+| Rugved Khanwalkar    | 2025MB26040 | 9713659612     |
+| Shoaib Ahmed Sharief | 2025MB26144 | 8553876690     |
+| Shreya               | 2025MB26176 | 7835806150     |
+| Sonali               | 2025MB26173 | 8796882648     |
+| Srishti Shrivastava  | 2025MB26194 | 8989837578     |
 
 ## 🎓 Course
 
