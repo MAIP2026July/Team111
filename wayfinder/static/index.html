@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wayfinder AI - MVP</title>
+<style>
+  :root { --ink:#1b2430; --muted:#5d6b7a; --line:#dfe5ec; --bg:#f4f6f9; --card:#fff; --brand:#1f4e79; --brand2:#2e75b6;
+          --ok:#1e7b4f; --okbg:#e3f4ea; --warn:#9a5b00; --warnbg:#fff2dc; --bad:#a3262a; --badbg:#fbe5e5; --safe:#7a1f1f; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+  header { background:var(--brand); color:#fff; padding:12px 24px; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:18px; margin:0; letter-spacing:.2px; }
+  header .mode { margin-left:auto; font-size:12px; background:rgba(255,255,255,.15); padding:4px 10px; border-radius:12px; }
+  nav { display:flex; gap:4px; background:#fff; border-bottom:1px solid var(--line); padding:0 16px; }
+  nav button { border:0; background:none; padding:12px 14px; font-size:14px; color:var(--muted); cursor:pointer; border-bottom:3px solid transparent; }
+  nav button.on { color:var(--brand); border-bottom-color:var(--brand); font-weight:600; }
+  main { padding:20px 24px; max-width:1280px; margin:0 auto; }
+  .tab { display:none; } .tab.on { display:block; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px; }
+  h2 { font-size:16px; margin:0 0 12px; } h3 { font-size:14px; margin:0 0 8px; }
+  .muted { color:var(--muted); } .small { font-size:12px; }
+  .grid { display:grid; gap:16px; } .g2 { grid-template-columns: 1fr 1fr; } .g5 { grid-template-columns: repeat(5, 1fr); }
+  .kpi { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .kpi .v { font-size:24px; font-weight:700; color:var(--brand); } .kpi .l { font-size:12px; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; } th, td { text-align:left; padding:8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:12px; color:var(--muted); font-weight:600; background:#fafbfc; }
+  .pill { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
+  .High { background:var(--badbg); color:var(--bad); } .Medium { background:var(--warnbg); color:var(--warn); } .Low { background:#eef2f7; color:var(--muted); }
+  .open { background:var(--warnbg); color:var(--warn); } .resolved, .approved { background:var(--okbg); color:var(--ok); } .dismissed, .rejected { background:#eef2f7; color:var(--muted); }
+  .draft, .pending { background:#e6effa; color:var(--brand2); }
+  button.b { border:1px solid var(--brand); background:var(--brand); color:#fff; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; }
+  button.b.sec { background:#fff; color:var(--brand); } button.b.red { background:#fff; color:var(--bad); border-color:var(--bad); }
+  button.b:disabled { opacity:.5; cursor:default; }
+  input[type=text], select, textarea { border:1px solid var(--line); border-radius:6px; padding:7px 9px; font:inherit; }
+  .ev { background:#fafbfc; border-left:3px solid var(--line); padding:6px 10px; margin:6px 0; font-size:13px; }
+  .ev.bad { border-left-color:var(--bad); } .ev.good { border-left-color:var(--ok); }
+  /* Ask Wayfinder phone */
+  .askwrap { display:grid; grid-template-columns: 420px 1fr; gap:24px; }
+  .phone { background:#111; border-radius:32px; padding:14px; box-shadow:0 8px 24px rgba(0,0,0,.18); }
+  .screen { background:#fff; border-radius:22px; height:680px; display:flex; flex-direction:column; overflow:hidden; }
+  .shead { background:var(--brand); color:#fff; padding:14px 16px; }
+  .shead b { font-size:16px; } .shead div { font-size:11px; opacity:.85; }
+  .chat { flex:1; overflow:auto; padding:12px; background:#f6f8fb; }
+  .msg { margin:8px 0; max-width:92%; padding:10px 12px; border-radius:14px; white-space:pre-wrap; font-size:14px; }
+  .me { background:var(--brand2); color:#fff; margin-left:auto; border-bottom-right-radius:4px; }
+  .bot { background:#fff; border:1px solid var(--line); border-bottom-left-radius:4px; }
+  .bot.safety { border:2px solid var(--safe); background:#fff7f7; }
+  .bot.refused { background:#fffaf0; border-color:#f0d9a8; }
+  .banner { font-size:11px; font-weight:700; color:#fff; background:var(--safe); padding:3px 8px; border-radius:6px; display:inline-block; margin-bottom:6px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .chip { font-size:11px; background:#e6effa; color:var(--brand); border-radius:10px; padding:3px 8px; cursor:pointer; border:0; }
+  .meta { font-size:11px; color:var(--muted); margin-top:6px; }
+  .fb { display:flex; gap:6px; margin-top:8px; } .fb button { border:1px solid var(--line); background:#fff; border-radius:14px; padding:4px 12px; font-size:16px; cursor:pointer; min-width:44px; }
+  .fb button.sel { background:#e6effa; border-color:var(--brand2); }
+  .inputbar { display:flex; gap:8px; padding:10px; border-top:1px solid var(--line); background:#fff; }
+  .inputbar input { flex:1; font-size:15px; padding:12px; border-radius:22px; }
+  .inputbar button { border-radius:22px; padding:0 18px; font-size:15px; }
+  .samples button { margin:0 6px 6px 0; }
+  /* review */
+  .rev { display:grid; grid-template-columns: 1fr 1.2fr; gap:16px; }
+  .src p { margin:4px 0; padding:4px 6px; border-radius:4px; font-size:13px; } .src p.hl { background:#fff3c4; }
+  .item { display:flex; gap:8px; align-items:flex-start; margin:6px 0; }
+  .item textarea { flex:1; min-height:38px; resize:vertical; font-size:13px; }
+  .srcchip { font-size:10px; white-space:nowrap; background:#eef2f7; color:var(--muted); border-radius:8px; padding:3px 6px; cursor:pointer; border:0; margin-top:6px; }
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.4); display:none; align-items:center; justify-content:center; z-index:10; }
+  .modal.on { display:flex; } .modal .box { background:#fff; border-radius:10px; max-width:640px; width:92%; max-height:80vh; overflow:auto; padding:18px; }
+  .toast { position:fixed; bottom:20px; right:20px; background:var(--ink); color:#fff; padding:10px 16px; border-radius:8px; display:none; z-index:20; }
+</style>
+</head>
+<body>
+<header><h1>Wayfinder AI</h1><span class="small" style="opacity:.8">Content Studio + Ask Wayfinder - MVP (synthetic data, fictional plant)</span><span class="mode" id="mode">...</span></header>
+<nav id="nav">
+  <button data-t="ask" class="on">Ask Wayfinder (Worker)</button>
+  <button data-t="health">Content Health</button>
+  <button data-t="review">Review &amp; Approve</button>
+  <button data-t="gaps">Content Gaps</button>
+  <button data-t="audit">Audit &amp; Analytics</button>
+</nav>
+<main>
+<!-- ASK -->
+<section class="tab on" id="t-ask">
+  <div class="askwrap">
+    <div class="phone"><div class="screen">
+      <div class="shead"><b>Ask Wayfinder</b><div>Answers only from approved procedures - always cited</div></div>
+      <div class="chat" id="chat"><div class="msg bot">Hi! Ask me about a procedure, a setting or a check. I only answer from approved SOPs and training, and I'll show you the source.</div></div>
+      <div class="inputbar"><input id="q" type="text" placeholder="Type your question..." autocomplete="off"><button class="b" id="send">Ask</button></div>
+    </div></div>
+    <div>
+      <div class="card"><h2>Try these questions</h2>
+        <div class="samples" id="samples"></div>
+        <p class="small muted">Worker identity is pseudonymized (hashed) and never used for performance evaluation.</p>
+        <label class="small">Signed in as (shared kiosk):
+          <select id="worker"><option>Line 3 Operator A</option><option>Stamping Operator B</option><option>Warehouse Operator C</option></select></label>
+      </div>
+      <div class="card"><h2>How this answer was produced</h2><div id="explain" class="small muted">Ask a question to see the retrieval and trust trail.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HEALTH -->
+<section class="tab" id="t-health">
+  <div class="grid g5" id="kpis"></div>
+  <div style="height:16px"></div>
+  <div class="card"><h2>Flagged content <span class="small muted">- outdated, conflicting, duplicate or missing training</span></h2><div id="flags"></div></div>
+  <div class="grid g2">
+    <div class="card"><h2>Upload a document</h2>
+      <p class="small muted">.md, .txt or .docx. New documents stay <b>pending</b> and are not searchable until approved in Review &amp; Approve.</p>
+      <input type="file" id="file" accept=".md,.txt,.docx"> <button class="b" id="upbtn">Upload</button>
+      <div id="upres" class="small" style="margin-top:8px"></div></div>
+    <div class="card"><h2>Knowledge base</h2><div id="docs" style="max-height:260px;overflow:auto"></div></div>
+  </div>
+</section>
+
+<!-- REVIEW -->
+<section class="tab" id="t-review">
+  <div class="card"><h2>Review queue</h2><div id="drafts"></div></div>
+  <div id="revpane"></div>
+</section>
+
+<!-- GAPS -->
+<section class="tab" id="t-gaps">
+  <div class="card"><h2>Content gaps from real worker questions</h2>
+    <p class="small muted">Unanswered questions and answers rated not helpful or wrong, grouped by closest topic. This is the feedback loop from Ask Wayfinder to Content Studio.</p>
+    <div id="gaps"></div></div>
+</section>
+
+<!-- AUDIT -->
+<section class="tab" id="t-audit">
+  <div class="grid g2">
+    <div class="card"><h2>Governance audit trail</h2><div id="audit" style="max-height:600px;overflow:auto"></div></div>
+    <div class="card"><h2>Answer log</h2><div id="answers" style="max-height:600px;overflow:auto"></div></div>
+  </div>
+</section>
+</main>
+<div class="modal" id="modal"><div class="box" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const api = async (path, body) => {
+  const r = await fetch(path, body ? {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)} : {});
+  const j = await r.json(); if (!r.ok) { toast(j.error || "Error"); throw new Error(j.error); } return j;
+};
+const toast = m => { const t = $("#toast"); t.textContent = m; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 2600); };
+const fmt = ts => new Date(ts * 1000).toLocaleString();
+const modal = html => { $("#mbox").innerHTML = html + '<p style="text-align:right"><button class="b sec" onclick="closeModal()">Close</button></p>'; $("#modal").classList.add("on"); };
+const closeModal = () => $("#modal").classList.remove("on");
+$("#modal").onclick = e => { if (e.target.id === "modal") closeModal(); };
+
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => show(b.dataset.t));
+function show(t) {
+  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.t === t));
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.id === "t-" + t));
+  ({health: loadHealth, review: loadReview, gaps: loadGaps, audit: loadAudit})[t]?.();
+}
+
+// ---------------- Ask
+const SAMPLES = ["What torque for the conveyor guard bolts?", "How often do torque wrenches need calibration?",
+  "What clamp pressure for the HP-2 die change?", "Which bin do oily rags go in?", "How many brackets do I inspect per batch?",
+  "Who is allowed to remove a lock?", "There is a chemical spill near line 2, what do I do?", "What is on the cafeteria menu today?"];
+$("#samples").innerHTML = SAMPLES.map(s => `<button class="b sec" onclick='ask(${JSON.stringify(s)})'>${esc(s)}</button>`).join("");
+$("#send").onclick = () => ask($("#q").value);
+$("#q").onkeydown = e => { if (e.key === "Enter") ask($("#q").value); };
+let CITES = {};
+async function ask(q) {
+  q = (q || "").trim(); if (!q) return; $("#q").value = "";
+  const chat = $("#chat");
+  chat.insertAdjacentHTML("beforeend", `<div class="msg me">${esc(q)}</div>`);
+  chat.insertAdjacentHTML("beforeend", `<div class="msg bot" id="typing">...</div>`); chat.scrollTop = 1e6;
+  const r = await api("/api/ask", {question: q, worker: $("#worker").value});
+  $("#typing").remove();
+  CITES[r.query_id] = r.citations;
+  const cls = r.route === "safety" ? "safety" : (r.answered ? "" : "refused");
+  let body = esc(r.answer);
+  if (r.route === "safety") body = `<span class="banner">SAFETY-CRITICAL - VERBATIM PROCEDURE</span>\n` + body;
+  const chips = r.route === "safety" && r.citations.length ?
+    `<button class="chip" onclick="openDoc('${esc(r.citations[0].doc_id)}')">${esc(r.citations[0].doc_id)} v${r.citations[0].version} - full procedure (${r.citations.length} steps)</button>` :
+    r.citations.map((c, i) => `<button class="chip" onclick="cite(${r.query_id},${i})">[${i+1}] ${esc(c.doc_id)} v${c.version} - ${esc(c.section)}</button>`).join("");
+  const first = r.citations[0];
+  const meta = first ? `Source approved ${esc(first.approved_on)} by ${esc(first.owner)} - ${r.mode} mode - ${r.latency_ms} ms` :
+     (r.route === "refused" ? "No approved source matched - question logged as a content gap" : "");
+  chat.insertAdjacentHTML("beforeend", `<div class="msg bot ${cls}">${body}
+    ${chips ? `<div class="chips">${chips}</div>` : ""}<div class="meta">${meta}</div>
+    <div class="fb" id="fb${r.query_id}"><button title="Helpful" onclick="fb(${r.query_id},'up',this)">&#128077;</button><button title="Not helpful" onclick="fb(${r.query_id},'down',this)">&#128078;</button><button title="Wrong" style="font-size:12px" onclick="fbWrong(${r.query_id},this)">Wrong</button></div></div>`);
+  chat.scrollTop = 1e6;
+  $("#explain").innerHTML = `<table>
+    <tr><th>Step</th><th>Result</th></tr>
+    <tr><td>1. Safety router</td><td>${r.route === "safety" ? '<span class="pill High">Safety-critical: verbatim procedure + EHS contact, no AI paraphrase</span>' : "Not safety-critical"}</td></tr>
+    <tr><td>2. Retrieval (BM25 + synonyms, approved content only)</td><td>Top document: <b>${esc(r.top_doc || "none")}</b></td></tr>
+    <tr><td>3. Answerability check</td><td>${r.answered ? "Score and query coverage above threshold" : "Below threshold - refused, logged as gap"}</td></tr>
+    <tr><td>4. Generation</td><td>${r.mode === "llm" ? "Claude, constrained to cited passages; citations validated" : r.mode === "verbatim" ? "Verbatim (no generation)" : r.mode === "extractive" ? "Extractive: approved sentences quoted as-is" : "Fixed refusal message"}</td></tr>
+    <tr><td>5. Citations</td><td>${r.citations.length} passage(s), each linked to version + approver</td></tr>
+    <tr><td>Latency</td><td>${r.latency_ms} ms</td></tr></table>`;
+}
+function cite(qid, i) {
+  const c = CITES[qid][i];
+  modal(`<h3>${esc(c.doc_id)} - ${esc(c.title)} (v${c.version})</h3><p class="small muted">Section: ${esc(c.section)} - approved ${esc(c.approved_on)} - owner ${esc(c.owner)}</p>
+    <div class="ev good">${esc(c.text)}</div><p><button class="b sec" onclick="openDoc('${esc(c.doc_id)}','${esc(c.pid)}')">Open full document</button></p>`);
+}
+async function openDoc(id, pid) {
+  const d = await api("/api/doc?id=" + encodeURIComponent(id));
+  const pt = pid ? (CITES_TEXT(pid)) : "";
+  modal(`<h3>${esc(d.id)} - ${esc(d.title)} (v${d.version})</h3><p class="small muted">${esc(d.type.toUpperCase())} - ${esc(d.status)} - ${esc(d.meta.area || "")} - owner ${esc(d.meta.owner || "-")}</p>` +
+    d.sections.map(s => `<h3 style="margin-top:12px">${esc(s.heading)}</h3>` + s.body.split("\n").map(l => `<p style="margin:3px 0" class="${pt && l.includes(pt) ? "hl" : ""}">${esc(l)}</p>`).join("")).join("")
+    .replace(/class="hl"/g, 'style="background:#fff3c4;margin:3px 0"'));
+}
+function CITES_TEXT(pid) { for (const k in CITES) for (const c of CITES[k]) if (c.pid === pid) return c.text; return ""; }
+async function fb(qid, rating, el, reason) {
+  await api("/api/feedback", {query_id: qid, rating, reason: reason || ""});
+  el.parentElement.querySelectorAll("button").forEach(b => b.classList.remove("sel")); el.classList.add("sel");
+  toast(rating === "up" ? "Thanks for the feedback" : "Thanks - sent to the content owner");
+}
+function fbWrong(qid, el) {
+  modal(`<h3>What was wrong?</h3>` + ["Outdated value", "Wrong equipment/area", "Missing a step", "Did not answer my question"].map(r =>
+    `<p><button class="b sec" onclick="fb(${qid},'wrong',document.querySelector('#fb${qid} button:last-child'),'${r}');closeModal()">${r}</button></p>`).join(""));
+}
+
+// ---------------- Health
+async function loadHealth() {
+  const [h, flags, docs] = await Promise.all([api("/api/health"), api("/api/flags"), api("/api/docs")]);
+  $("#mode").textContent = "Mode: " + h.mode;
+  const k = [["Content freshness", h.freshness + "%"], ["Open flags", h.open_flags], ["Approved SOPs / modules", `${h.sops} / ${h.modules}`],
+             ["Questions answered", h.resolution_rate == null ? "-" : h.resolution_rate + "%"], ["Drafts awaiting SME", h.pending_drafts]];
+  $("#kpis").innerHTML = k.map(([l, v]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  const order = {open: 0, resolved: 1, dismissed: 2}, sev = {High: 0, Medium: 1, Low: 2};
+  flags.sort((a, b) => order[a.status] - order[b.status] || sev[a.severity] - sev[b.severity]);
+  $("#flags").innerHTML = `<table><tr><th>Severity</th><th>Type</th><th>Document</th><th>Why flagged (evidence)</th><th>Status</th><th>Action</th></tr>` +
+    flags.map(f => `<tr><td><span class="pill ${f.severity}">${f.severity}</span></td><td>${esc(f.type)}</td>
+      <td><a href="#" onclick="openDoc('${esc(f.doc)}');return false">${esc(f.doc)}</a><div class="small muted">${esc(f.doc_title)}</div></td>
+      <td>${esc(f.reason)}${f.evidence.map((e, i) => `<div class="ev ${f.type.startsWith("Conflict") ? (i ? "good" : "bad") : ""}"><b>${esc(e.label)}:</b> ${esc(e.text)}</div>`).join("")}</td>
+      <td><span class="pill ${f.status}">${f.status}</span></td>
+      <td>${f.status === "open" ? `<button class="b" onclick="gen('${esc(f.sop)}','${f.type === "No training module" ? "" : esc(f.doc)}')">Generate ${f.type === "No training module" ? "" : "revised "}draft</button>
+        <div style="height:6px"></div><button class="b sec" onclick="resolveFlag('${esc(f.id)}','dismissed')">Dismiss</button>` : ""}</td></tr>`).join("") + "</table>";
+  $("#docs").innerHTML = `<table><tr><th>ID</th><th>Title</th><th>Type</th><th>Ver</th><th>Status</th></tr>` +
+    docs.map(d => `<tr><td><a href="#" onclick="openDoc('${esc(d.id)}');return false">${esc(d.id)}</a></td><td>${esc(d.title)}</td><td>${d.type}</td><td>${d.version}</td>
+      <td><span class="pill ${d.type === "training" ? "dismissed" : d.status}">${d.type === "training" ? "legacy - not indexed" : d.status}</span></td></tr>`).join("") + "</table>";
+}
+async function gen(sop, replaces) {
+  toast("AI Content Agent is drafting...");
+  const d = await api("/api/drafts", {sop_id: sop, replaces: replaces || null});
+  show("review"); openDraft(d.id);
+}
+async function resolveFlag(id, status) { await api("/api/flags/resolve", {flag_id: id, status}); loadHealth(); }
+$("#upbtn").onclick = async () => {
+  const f = $("#file").files[0]; if (!f) return toast("Choose a file first");
+  const b64 = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1]); r.readAsDataURL(f); });
+  const r = await api("/api/upload", {filename: f.name, content_b64: b64});
+  $("#upres").innerHTML = `Uploaded <b>${esc(r.id)}</b> - ${r.sections} sections, ${r.passages} passages. <span class="pill pending">pending approval</span>`;
+  loadHealth();
+};
+
+// ---------------- Review
+async function loadReview() {
+  const [drafts, docs] = await Promise.all([api("/api/drafts"), api("/api/docs")]);
+  const pend = docs.filter(d => d.status === "pending");
+  $("#drafts").innerHTML = (drafts.length || pend.length) ? `<table><tr><th>Item</th><th>Source</th><th>Generator</th><th>Status</th><th>Approver</th><th></th></tr>` +
+    drafts.map(d => `<tr><td>${esc(d.title)}</td><td>${esc(d.sop_id)}${d.replaces ? " (replaces " + esc(d.replaces) + ")" : ""}</td><td>${d.generator === "llm" ? "Claude" : "Template (offline)"}</td>
+      <td><span class="pill ${d.status}">${d.status}</span></td><td>${esc(d.approver || "-")}</td><td><button class="b sec" onclick="openDraft(${d.id})">${d.status === "draft" ? "Review" : "View"}</button></td></tr>`).join("") +
+    pend.map(d => `<tr><td>Uploaded document: ${esc(d.title)}</td><td>${esc(d.id)}</td><td>-</td><td><span class="pill pending">pending</span></td><td>-</td>
+      <td><button class="b sec" onclick="openDoc('${esc(d.id)}')">View</button> <button class="b" onclick="approveUpload('${esc(d.id)}')">Approve</button></td></tr>`).join("") + "</table>"
+    : `<p class="muted">Nothing to review. Generate a draft from a flag in Content Health.</p>`;
+}
+async function approveUpload(id) {
+  const who = prompt("Approver name (required for the audit trail):", "Quality Lead"); if (!who) return;
+  await api("/api/upload/approve", {id, approver: who}); toast("Approved - now searchable by the assistant"); loadReview();
+}
+let CUR = null;
+async function openDraft(id) {
+  const d = await api("/api/draft?id=" + id); CUR = d; await loadReview();
+  const editable = d.status === "draft";
+  const srcHtml = d.source.sections.map(s => `<h3 style="margin-top:10px">${esc(s.heading)}</h3>` +
+     s.body.split("\n").map(l => { const pid = Object.keys(d.source_passages).find(k => l.includes(d.source_passages[k])); return `<p data-pid="${pid || ""}">${esc(l)}</p>`; }).join("")).join("");
+  const old = d.replaces_doc ? `<div class="card"><h3>Being replaced: ${esc(d.replaces_doc.id)} - ${esc(d.replaces_doc.title)} <span class="pill High">outdated</span></h3>` +
+     d.replaces_doc.sections.map(s => `<p class="small"><b>${esc(s.heading)}:</b> ${esc(s.body).replace(/\n/g, " / ")}</p>`).join("") + "</div>" : "";
+  const items = d.content.sections.map((s, si) => `<h3 style="margin-top:12px">${esc(s.heading)}</h3>` + s.items.map((it, ii) =>
+     `<div class="item"><textarea data-s="${si}" data-i="${ii}" ${editable ? "" : "disabled"}>${esc(it.text)}</textarea><button class="srcchip" onmouseenter="hl('${esc(it.source)}')" onclick="hl('${esc(it.source)}',1)">${esc(it.source)}</button></div>`).join("")).join("");
+  $("#revpane").innerHTML = `<div class="rev">
+    <div><div class="card src"><h2>Approved source: ${esc(d.source.id)} v${d.source.version}</h2><p class="small muted">${esc(d.source.title)} - hover a source tag on the right to highlight the supporting line</p>${srcHtml}</div>${old}</div>
+    <div class="card"><h2>${esc(d.title)} <span class="pill ${d.status}">${d.status}</span></h2>
+      <p class="small muted">AI draft (${d.generator === "llm" ? "Claude" : "offline template"}). Every line links to its source passage. Edit freely; nothing goes live without a named approver.</p>
+      ${items}
+      ${editable ? `<div style="margin-top:16px;display:flex;gap:8px;align-items:center"><input type="text" id="approver" placeholder="Approver name (SME)" value="">
+        <button class="b" onclick="decide('approve')">Approve &amp; publish</button><button class="b red" onclick="decide('reject')">Reject</button></div>`
+        : `<p class="small">Decided by <b>${esc(d.approver)}</b> on ${fmt(d.decided_ts)}</p>`}
+    </div></div>`;
+}
+function hl(pid, scroll) {
+  document.querySelectorAll(".src p").forEach(p => p.classList.toggle("hl", p.dataset.pid === pid));
+  if (scroll) document.querySelector(`.src p[data-pid="${pid}"]`)?.scrollIntoView({block: "center", behavior: "smooth"});
+}
+async function decide(decision) {
+  const approver = $("#approver").value.trim(); if (!approver) return toast("A named approver is required");
+  const content = JSON.parse(JSON.stringify(CUR.content));
+  document.querySelectorAll("#revpane textarea").forEach(t => content.sections[t.dataset.s].items[t.dataset.i].text = t.value);
+  const r = await api("/api/drafts/decide", {id: CUR.id, approver, decision, content});
+  toast(r.status === "approved" ? "Published - now used by Ask Wayfinder; related flags resolved" : "Draft rejected");
+  openDraft(CUR.id);
+}
+
+// ---------------- Gaps
+async function loadGaps() {
+  const g = await api("/api/gaps");
+  $("#gaps").innerHTML = g.length ? `<table><tr><th>Topic</th><th>Count</th><th>Example questions</th><th>Reasons</th><th></th></tr>` +
+    g.map(x => `<tr><td><b>${esc(x.topic)}</b></td><td>${x.count}</td><td>${x.examples.map(e => `<div>"${esc(e.q)}" <span class="pill ${e.kind === "unanswered" ? "open" : "High"}">${e.kind}</span></div>`).join("")}</td>
+      <td class="small">${Object.entries(x.reasons).map(([k, v]) => `${esc(k)} (${v})`).join("<br>") || "-"}</td>
+      <td>${x.task_created ? '<span class="pill resolved">task created</span>' : `<button class="b" onclick='task(${JSON.stringify(x.topic)}, ${JSON.stringify(x.ids)})'>Create content task</button>`}</td></tr>`).join("") + "</table>"
+    : `<p class="muted">No gaps yet. Ask an out-of-scope question or rate an answer down in Ask Wayfinder.</p>`;
+}
+async function task(topic, ids) { await api("/api/gaps/task", {topic, ids}); toast("Content task created for the L&D owner"); loadGaps(); }
+
+// ---------------- Audit
+async function loadAudit() {
+  const a = await api("/api/audit");
+  $("#audit").innerHTML = `<table><tr><th>Time</th><th>Actor</th><th>Action</th><th>Detail</th></tr>` +
+    a.events.map(e => `<tr><td class="small">${fmt(e.ts)}</td><td>${esc(e.actor)}</td><td>${esc(e.action)}</td><td class="small"><code>${esc(e.detail)}</code></td></tr>`).join("") + "</table>";
+  $("#answers").innerHTML = `<table><tr><th>Time</th><th>Worker (hash)</th><th>Question</th><th>Route</th><th>Sources</th><th>Rating</th></tr>` +
+    a.answers.map(q => `<tr><td class="small">${fmt(q.ts)}</td><td class="small"><code>${esc(q.worker)}</code></td><td>${esc(q.question)}</td>
+      <td><span class="pill ${q.route === "safety" ? "High" : q.answered ? "resolved" : "open"}">${q.route}</span></td><td class="small">${esc(JSON.parse(q.citations).join(", "))}</td><td>${esc(q.rating || "-")}</td></tr>`).join("") + "</table>";
+}
+api("/api/health").then(h => $("#mode").textContent = "Mode: " + h.mode);
+</script>
+</body>
+</html>

@@ -28,3 +28,7 @@ For the complete product strategy, architecture, roadmap, risks, and success met
 ## 📄 Project Document
 
 The detailed **Wayfinder AI – Product Strategy Submission** is available in this repository.
+
+## Functional MVP
+
+This repository also includes the runnable Wayfinder AI prototype. See [MVP_README.md](MVP_README.md) for setup and run instructions. The app uses Python 3.10+ and the standard library.

@@ -1,0 +1,548 @@
+{
+  "metrics": {
+    "n_total": 40,
+    "n_answerable": 26,
+    "n_safety": 6,
+    "n_refuse": 8,
+    "retrieval_recall_at_5": 100.0,
+    "answer_correctness": 96.2,
+    "faithfulness_proxy": 100.0,
+    "citation_accuracy": 100.0,
+    "false_refusal_rate": 3.8,
+    "correct_refusal_rate": 100.0,
+    "safety_routing_accuracy": 100.0,
+    "latency_median_ms": 0.5,
+    "latency_p95_ms": 0.9,
+    "mode": "Offline extractive"
+  },
+  "gates": {
+    "retrieval_recall_at_5": true,
+    "faithfulness_proxy": true,
+    "citation_accuracy": true,
+    "correct_refusal_rate": true,
+    "safety_routing_accuracy": true,
+    "false_refusal_rate": true,
+    "latency_p95_ms": true
+  },
+  "rows": [
+    {
+      "q": "What torque should the conveyor guard bolts be tightened to?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-114"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Max gap between conveyor guard and belt edge?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-114"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "How often is full guard maintenance done on conveyor C3?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-114"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What thread locker do I use on guard bolts?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-114",
+        "SOP-114"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What clamp pressure for the HP-2 die change?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-121",
+        "SOP-121"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "How many slow strokes after a die change?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-121"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Where does the first part go after die changeover?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-121"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Minimum forklift battery charge before use?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-130"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What do I do if a forklift fails the pre-shift check?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-130",
+        "SOP-130"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "How often do torque wrenches need calibration?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-142"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Can I use a torque wrench to loosen a bolt?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-142"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "I dropped a torque wrench, what now?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-142"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "How many brackets do I inspect per batch?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-155",
+        "SOP-155"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What is the minimum weld leg length?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-155"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Mounting gap tolerance in fixture WB-7?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-155"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "When do I stop the weld cell?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-155",
+        "SOP-155"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Which way does the label roll load on LP-4?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-160",
+        "SOP-160"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What scan grade does the test label need?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-160"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "How long is the shift handover meeting?",
+      "type": "answer",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "recall5": true,
+      "routed_ok": false,
+      "correct": false,
+      "faithful": false,
+      "citation_ok": false
+    },
+    {
+      "q": "Who signs the shift log at handover?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-172"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What should the compressed air header pressure be?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-188",
+        "SOP-188"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "What dew point should the air dryer show?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-188"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "How do I tag an air leak?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-188"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Which bin do oily rags go in?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-195"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Where does clean cardboard go?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-195"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Where do I put scrap metal and swarf?",
+      "type": "answer",
+      "route": "answered",
+      "answered": true,
+      "cited": [
+        "SOP-195"
+      ],
+      "recall5": true,
+      "routed_ok": true,
+      "correct": true,
+      "faithful": true,
+      "citation_ok": true
+    },
+    {
+      "q": "Who is allowed to remove a lock?",
+      "type": "safety",
+      "route": "safety",
+      "answered": true,
+      "cited": [
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101"
+      ],
+      "routed_ok": true
+    },
+    {
+      "q": "How do I lock out the conveyor before maintenance?",
+      "type": "safety",
+      "route": "safety",
+      "answered": true,
+      "cited": [
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101"
+      ],
+      "routed_ok": true
+    },
+    {
+      "q": "Do I need LOTO to clear a jam inside the guard?",
+      "type": "safety",
+      "route": "safety",
+      "answered": true,
+      "cited": [
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101",
+        "SOP-101"
+      ],
+      "routed_ok": true
+    },
+    {
+      "q": "There is a chemical spill near line 2, what do I do?",
+      "type": "safety",
+      "route": "safety",
+      "answered": true,
+      "cited": [
+        "SOP-108",
+        "SOP-108",
+        "SOP-108",
+        "SOP-108",
+        "SOP-108",
+        "SOP-108"
+      ],
+      "routed_ok": true
+    },
+    {
+      "q": "What PPE do I need to clean up a spill?",
+      "type": "safety",
+      "route": "safety",
+      "answered": true,
+      "cited": [
+        "SOP-108",
+        "SOP-108",
+        "SOP-108",
+        "SOP-108",
+        "SOP-108",
+        "SOP-108"
+      ],
+      "routed_ok": true
+    },
+    {
+      "q": "Someone got injured at the press, what should I do?",
+      "type": "safety",
+      "route": "safety",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "What is on the cafeteria menu today?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "When is the next payroll date?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "How do I apply for annual leave?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "What is the wifi password for the break room?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "What is the cycle time target for line 5 robots?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "How do I reset the paint booth oven controller?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "Who won the cricket match yesterday?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    },
+    {
+      "q": "What oil grade does the gearbox on the mixer use?",
+      "type": "refuse",
+      "route": "refused",
+      "answered": false,
+      "cited": [],
+      "routed_ok": true
+    }
+  ]
+}
